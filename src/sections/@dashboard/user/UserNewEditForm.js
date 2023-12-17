@@ -38,21 +38,21 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
 
   function getStatusDescription(status) {
     if (status === "true") {
-        return "Đi Học";
+      return "Đi Học";
     } if (status === "pending") {
-        return "Tạm Dừng";
-    } 
-        return "Nghỉ Học"; // Default case for any other status
-}
-
-function getStatusColour(status) {
-  if (status === "true") {
-      return "success";
-  } if (status === "pending") {
-      return "warning";
+      return "Tạm Dừng";
+    }
+    return "Nghỉ Học"; // Default case for any other status
   }
-      return"error"; // Default case for any other status
-}
+
+  function getStatusColour(status) {
+    if (status === "true") {
+      return "success";
+    } if (status === "pending") {
+      return "warning";
+    }
+    return "error"; // Default case for any other status
+  }
 
   const navigate = useNavigate();
 
@@ -121,6 +121,11 @@ function getStatusColour(status) {
 
   const values = watch();
 
+  const handleStatusChange = (event) => {
+    // Use setValue to update the 'status' field in the form
+    setValue('status', event.target.checked ? "true" : "false", { shouldValidate: true });
+    console.log("student status", values.status);
+  };
 
 
   useEffect(() => {
@@ -200,7 +205,7 @@ function getStatusColour(status) {
           <Card sx={{ pt: 10, pb: 5, px: 3 }}>
 
             <Label
-             color={getStatusColour(values.status)}
+              color={getStatusColour(values.status)}
               sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
             >
               {getStatusDescription(values.status)}
@@ -229,11 +234,38 @@ function getStatusColour(status) {
               />
             </Box>
 
+            <Controller
+              name="status"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <FormControlLabel
+                  sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
+                  labelPlacement="start"
+                  control={
+                    <Switch
+                      checked={value === "true"}
+                      onChange={(e) => onChange(e.target.checked ? "true" : "pending")}
+                    />
+                  }
+                  label={
+                    <>
+                      <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                        Trạng Thái
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        Tắt Trạng Thái Đi Học
+                      </Typography>
+                    </>
+                  }
+                />
+              )}
+            />
 
-            <RHFSwitch
+            {/* <RHFSwitch
               name="status"
               labelPlacement="start"
               checked={values.status}
+              onChange={handleStatusChange}
               label={
                 <>
                   <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
@@ -246,8 +278,7 @@ function getStatusColour(status) {
               }
               sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
             //  sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-            />
-
+            /> */}
 
             <RHFTextField
               name="numberOfClass"
