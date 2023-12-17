@@ -9,7 +9,7 @@
   all(not(debug_assertions), target_os = "windows"),
   windows_subsystem = "windows"
 )]
-// pub mod models;
+pub mod models;
 #[tokio::main]
 pub async fn main() {
   // Change demo_mobile_app to the name of your app!

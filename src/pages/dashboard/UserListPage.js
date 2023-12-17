@@ -44,7 +44,7 @@ import { UserTableToolbar, UserTableRow } from '../../sections/@dashboard/user/l
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['Tất cả', 'Đi Học', 'Tạm Dừng','Nghỉ Học'];
+const STATUS_OPTIONS = ['Tất cả', 'Đi Học', 'Tạm Dừng', 'Nghỉ Học'];
 
 const ROLE_OPTIONS = [
   'tất cả',
@@ -95,28 +95,33 @@ export default function UserListPage() {
   // end
 
   // Get User Data 
-  const fetchUser = async () => {
-    primitives.invoke("get_all_student")
-    .then((response) => {
+  const fetchStudent = async () => {
+    try {
+      const response = await primitives.invoke("get_all_student");
       console.log("Invoke fn from Rust BE:", response);
-    })
-    .catch((error) => {
+      return response;
+    } catch (error) {
       console.error("Error:", error);
-    })
+      const dummy = [
+        [{ id: 1, first_name: "Error", last_name: "", date_of_birth: "", class: "", number_of_class: 1, status: "false" }],
+        // ... more rows
+      ];
+      return dummy;
+    }
   }
   // End.
 
   useEffect(() => {
     const fetchData = async () => {
-      // const user = await fetchUser();
+      const students = await fetchStudent();
       // examples API
-      const user = [
-        [{ id: 1, first_name: "Alice", last_name: "Ferguson", date_of_birth: "10/10/1996", class: "piano", number_of_class: 1, status: "pending"}],
-        [{ id: 2, first_name: "Bob", last_name: "Smith", date_of_birth: "08/15/1995", class: "guitar", number_of_class: 5, status: "false" }],
-        [{ id: 3, first_name: "Charlie", last_name: "Johnson", date_of_birth: "11/22/1994", class: "violin", number_of_class: 3, status: "true" }],
-        // ... more rows
-      ];
-      await setTableData(user);
+      // const user = [
+      //   [{ id: 1, first_name: "Alice", last_name: "Ferguson", date_of_birth: "10/10/1996", class: "piano", number_of_class: 1, status: "pending"}],
+      //   [{ id: 2, first_name: "Bob", last_name: "Smith", date_of_birth: "08/15/1995", class: "guitar", number_of_class: 5, status: "false" }],
+      //   [{ id: 3, first_name: "Charlie", last_name: "Johnson", date_of_birth: "11/22/1994", class: "violin", number_of_class: 3, status: "true" }],
+      //   // ... more rows
+      // ];
+      await setTableData(students);
     }
     fetchData();
   }, []);
@@ -173,29 +178,16 @@ export default function UserListPage() {
   };
 
   const handleDeleteRow = async (id) => {
+    console.log("this is delete id", id);
     try {
-      console.log(id)
-      const response = await axios.delete(
-        `http://127.0.0.1:3333/students/${id}`,
-        { withCredentials: true }
-      );
-      if (response.status === 200) {
-        console.log('success')
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        enqueueSnackbar('Delete success!');
-        const updateList = await fetchUser();
-        await setTableData(updateList);
-      }
-
-      //  const deleteRow = tableData.filter((row) => row.id !== id);
-      // setSelected([]);
-      //  setTableData(deleteRow);
-
-
-    } catch {
-      console.log("failed")
+      const response = await primitives.invoke("delete_student", { id });
+      console.log("Invoke fn from Rust BE:", response);
+      enqueueSnackbar('Delete success!');
+      await setTableData(response);
+    } catch (error) {
+      console.error("Error:", error);
+      enqueueSnackbar('Delete Error!', error);
     }
-
     if (page > 0) {
       if (dataInPage.length < 2) {
         setPage(page - 1);
@@ -204,22 +196,23 @@ export default function UserListPage() {
   };
 
   // delete student
-  const handleDeleteRows = (selectedRows) => {
-    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
-    setSelected([]);
-    setTableData(deleteRows);
+  // const handleDeleteRows = (selectedRows) => {
+  //   console.log("this is selected rows",selected);
+  //   const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
+  //   setSelected([]);
+  //   setTableData(deleteRows);
 
-    if (page > 0) {
-      if (selectedRows.length === dataInPage.length) {
-        setPage(page - 1);
-      } else if (selectedRows.length === dataFiltered.length) {
-        setPage(0);
-      } else if (selectedRows.length > dataInPage.length) {
-        const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
-        setPage(newPage);
-      }
-    }
-  };
+  //   if (page > 0) {
+  //     if (selectedRows.length === dataInPage.length) {
+  //       setPage(page - 1);
+  //     } else if (selectedRows.length === dataFiltered.length) {
+  //       setPage(0);
+  //     } else if (selectedRows.length > dataInPage.length) {
+  //       const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
+  //       setPage(newPage);
+  //     }
+  //   }
+  // };
   // end.
 
 
@@ -333,8 +326,8 @@ export default function UserListPage() {
                         row={row[0]}
                         selected={selected.includes(row[0].id)}
                         onSelectRow={() => onSelectRow(row[0].id)}
-                        onDeleteRow={() => handleDeleteRow(row[0].user_id)}
-                        onEditRow={() => handleEditRow(row[0].user_id)}
+                        onDeleteRow={() => handleDeleteRow(row[0].id)}
+                        onEditRow={() => handleEditRow(row[0].id)}
                       />
                     ))}
 
@@ -379,7 +372,7 @@ export default function UserListPage() {
             variant="contained"
             color="error"
             onClick={() => {
-              handleDeleteRows(selected);
+              handleDeleteRow(selected);
               handleCloseConfirm();
             }}
           >
