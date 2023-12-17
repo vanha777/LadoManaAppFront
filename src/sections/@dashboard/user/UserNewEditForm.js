@@ -35,6 +35,25 @@ UserNewEditForm.propTypes = {
 };
 
 export default function UserNewEditForm({ isEdit = false, currentUser }) {
+
+  function getStatusDescription(status) {
+    if (status === "true") {
+        return "Đi Học";
+    } if (status === "pending") {
+        return "Tạm Dừng";
+    } 
+        return "Nghỉ Học"; // Default case for any other status
+}
+
+function getStatusColour(status) {
+  if (status === "true") {
+      return "success";
+  } if (status === "pending") {
+      return "warning";
+  }
+      return"error"; // Default case for any other status
+}
+
   const navigate = useNavigate();
 
   const newDate = currentUser?.profile.date_of_birth.substring(0, 10);
@@ -55,7 +74,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
     class: Yup.string().required('Môn học bắt buộc'),   // this is mon hoc
     // avatarUrl: Yup.mixed().required('Avatar is required'), 
     numberOfClass: Yup.number().required('Số Buổi Học bắt buộc'),
-    status: Yup.boolean().required("Trạng Thái Đi Học bắt buộc"),
+    status: Yup.string().required("Trạng Thái Đi Học bắt buộc"),
     postCode: Yup.string().notRequired(),
     avatarUrl: Yup.mixed().notRequired(),
     startDate1: Yup.date().required('Bắt đầu học bắt buộc'),
@@ -78,7 +97,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
       // isVerified: currentUser?.isVerified || true
       numberOfClass: currentUser?.profile.number_of_class || "",
       numberOfMonth: currentUser?.profile.number_of_month || "",
-      status: currentUser?.profile.status || false,
+      status: currentUser?.profile.status || "false",
       dateOfBirth: newDate || "",
       class: currentUser?.profile.class || '',
     }),
@@ -181,12 +200,11 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
           <Card sx={{ pt: 10, pb: 5, px: 3 }}>
 
             <Label
-              color={values.status === true ? 'success' : 'error'}
+             color={getStatusColour(values.status)}
               sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
             >
-              {values.status !== true ? 'Ngừng học' : 'Đang học'}
+              {getStatusDescription(values.status)}
             </Label>
-
 
             <Box sx={{ mb: 5 }}>
               <RHFUploadAvatar

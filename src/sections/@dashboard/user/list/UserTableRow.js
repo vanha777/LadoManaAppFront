@@ -30,6 +30,24 @@ UserTableRow.propTypes = {
 
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
 
+  function getStatusDescription(status) {
+    if (status === "true") {
+        return "Đi Học";
+    } if (status === "pending") {
+        return "Tạm Dừng";
+    } 
+        return "Nghỉ Học"; // Default case for any other status
+}
+
+function getStatusColour(status) {
+  if (status === "true") {
+      return "success";
+  } if (status === "pending") {
+      return "warning";
+  }
+      return"error"; // Default case for any other status
+}
+
 
   const { id, user_id, first_name, last_name, avatar_url, date_of_birth, number_of_class, status } = row;
   const newDate = new Date(date_of_birth).toLocaleDateString();
@@ -101,10 +119,10 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         <TableCell align="left">
           <Label
             variant="soft"
-            color={(status === false && 'error') || 'success'}
+            color={getStatusColour(status)}
             sx={{ textTransform: 'capitalize' }}
           >
-            {status ? 'Đi học' : 'Ngừng học'}
+            {getStatusDescription(status)}
           </Label>
         </TableCell>
 

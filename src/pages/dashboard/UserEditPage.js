@@ -23,19 +23,40 @@ export default function UserEditPage() {
   console.log(`edit page ${name}`)
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`http://127.0.0.1:3333/students/${name}`, {
-          withCredentials: true,
-        });
-        console.log(response.data);
-        setCurrentUser(response.data);
-      } catch (error) {
-        console.error('Error fetching student data:', error);
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await axios.get(`http://127.0.0.1:3333/students/${name}`, {
+    //       withCredentials: true,
+    //     });
+    //     console.log(response.data);
+    //     
+    //   } catch (error) {
+    //     console.error('Error fetching student data:', error);
+    //   }
+    // };
+    // fetchData();
+    const currentUser = {
+      profile: {
+          first_name: "Alice",
+          last_name: "Johnson",
+          avatar_url: "http://example.com/avatar.jpg",
+          number_of_class: 15,
+          number_of_month: 6,
+          status: "pending",
+          class: "Biology",
+          date_of_birth: "1995-05-20"
+      },
+      info: {
+          email: "alice.johnson@example.com",
+          mobile: "1234567890",
+          address: "456 Park Avenue",
+          suburb: "Greenwood",
+          city: "Springfield",
+          post_code: "98765"
       }
-    };
-
-    fetchData();
+      // ... other properties of currentUser if needed
+  };
+  setCurrentUser(currentUser);
   }, [name]);
 
   const [currentUser, setCurrentUser] = useState();
