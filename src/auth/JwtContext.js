@@ -112,13 +112,14 @@ export function AuthProvider({ children }) {
 
   // LOGIN
   const login = useCallback(async (email, password) => {
-    const response = await axios.post('http://127.0.0.1:3333/login', {
-      email,
-      password,
-    }, { withCredentials: true });
-    const  user  = response.data[0]
-
-
+    // const response = await axios.post('http://127.0.0.1:3333/login', {
+    //   email,
+    //   password,
+    // }, { withCredentials: true });
+    // const  user  = response.data[0]
+    const user = {
+      first_name:"van ha"
+    };
     // setSession(accessToken);
 
     dispatch({

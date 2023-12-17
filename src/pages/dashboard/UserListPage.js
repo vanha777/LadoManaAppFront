@@ -3,6 +3,7 @@ import { paramCase } from 'change-case';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { primitives } from "@tauri-apps/api";
 // @mui
 import {
   Tab,
@@ -43,7 +44,7 @@ import { UserTableToolbar, UserTableRow } from '../../sections/@dashboard/user/l
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['Tất cả', 'Đi Học', 'Ngừng Học'];
+const STATUS_OPTIONS = ['Tất cả', 'Đi Học', 'Tạm Dừng','Nghỉ Học'];
 
 const ROLE_OPTIONS = [
   'tất cả',
@@ -89,31 +90,36 @@ export default function UserListPage() {
 
   const navigate = useNavigate();
 
-  // main student lsit
+  // main student list
   const [tableData, setTableData] = useState([]);
   // end
 
   // Get User Data 
   const fetchUser = async () => {
-    try {
-      const response = await axios.get('http://127.0.0.1:3333/students', {
-        withCredentials: true,
-      });
-      return (response.data)
-    } catch (error) {
-      return console.log(error)
-    }
+    primitives.invoke("get_all_student")
+    .then((response) => {
+      console.log("Invoke fn from Rust BE:", response);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    })
   }
   // End.
 
   useEffect(() => {
     const fetchData = async () => {
-      const user = await fetchUser();
+      // const user = await fetchUser();
+      // examples API
+      const user = [
+        [{ id: 1, first_name: "Alice", last_name: "Ferguson", date_of_birth: "10/10/1996", class: "piano", number_of_class: 1, status: "pending"}],
+        [{ id: 2, first_name: "Bob", last_name: "Smith", date_of_birth: "08/15/1995", class: "guitar", number_of_class: 5, status: "false" }],
+        [{ id: 3, first_name: "Charlie", last_name: "Johnson", date_of_birth: "11/22/1994", class: "violin", number_of_class: 3, status: "true" }],
+        // ... more rows
+      ];
       await setTableData(user);
     }
     fetchData();
   }, []);
-
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -407,11 +413,15 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
   }
 
   if (filterStatus === 'Đi Học') {
-    inputData = inputData.filter((user) => user[0].status === true);
+    inputData = inputData.filter((user) => user[0].status === "true");
   }
 
-  if (filterStatus === 'Ngừng Học') {
-    inputData = inputData.filter((user) => user[0].status === false);
+  if (filterStatus === 'Tạm Dừng') {
+    inputData = inputData.filter((user) => user[0].status === "pending");
+  }
+
+  if (filterStatus === 'Nghỉ Học') {
+    inputData = inputData.filter((user) => user[0].status === "false");
   }
 
   if (filterRole !== 'tất cả') {
