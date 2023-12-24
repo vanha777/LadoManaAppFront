@@ -2878,31 +2878,31 @@
   dependencies:
     "tslib" "^2.4.0"
 
-"@tauri-apps/api@^2.0.0-alpha.12":
-  "integrity" "sha512-acpNZQxFgHMHC5qV/IUg4IL/xmypzfxHB4ECkwb58fT48H4zBmklNd5TC0k7BvLUBoSmmgHc4InbYwQai392Yw=="
-  "resolved" "https://registry.npmjs.org/@tauri-apps/api/-/api-2.0.0-alpha.12.tgz"
-  "version" "2.0.0-alpha.12"
+"@tauri-apps/api@^2.0.0-alpha.13":
+  "integrity" "sha512-sGgCkFahF3OZAHoGN5Ozt9WK7wJlbVZSgWpPQKNag4nSOX1+Py6VDRTEWriiJHDiV+gg31CWHnNXRy6TFoZmdA=="
+  "resolved" "https://registry.npmjs.org/@tauri-apps/api/-/api-2.0.0-alpha.13.tgz"
+  "version" "2.0.0-alpha.13"
 
-"@tauri-apps/cli-darwin-arm64@2.0.0-alpha.18":
-  "integrity" "sha512-FBfbfSupOYG9BXmoGi1uRoMspqm5F0BdQbfgEuTkAnTl8cxUQnzOnoEc+qkd5+QqNCPssO89nsvijDLJmyK3AQ=="
-  "resolved" "https://registry.npmjs.org/@tauri-apps/cli-darwin-arm64/-/cli-darwin-arm64-2.0.0-alpha.18.tgz"
-  "version" "2.0.0-alpha.18"
+"@tauri-apps/cli-darwin-arm64@2.0.0-alpha.20":
+  "integrity" "sha512-L+6OYTjKA42U7XXLQDxoUb43hcKSU8mJ4T3PMCuE08jtv4p6MNfcJQ9FwBCYV6XqYmqE1s5AEBGxR4wBk7bbXQ=="
+  "resolved" "https://registry.npmjs.org/@tauri-apps/cli-darwin-arm64/-/cli-darwin-arm64-2.0.0-alpha.20.tgz"
+  "version" "2.0.0-alpha.20"
 
-"@tauri-apps/cli@^2.0.0-alpha.18":
-  "integrity" "sha512-M6KynJjEVyJuuBbt6EaiGiyKh/v8CF3pzCYzpjTy/rG6YXsZTnqRCOQqdWCB0KyHeDsPSODmoaDGyFq+MoZfig=="
-  "resolved" "https://registry.npmjs.org/@tauri-apps/cli/-/cli-2.0.0-alpha.18.tgz"
-  "version" "2.0.0-alpha.18"
+"@tauri-apps/cli@^2.0.0-alpha.20":
+  "integrity" "sha512-TNoaRunh2a9Id57EOWSSEziTszBdxyWUtHq9qw3olgY+i/fF3s0Kxwy2c7TM4kON1KnBSvzF+FEGRInNJNvbXw=="
+  "resolved" "https://registry.npmjs.org/@tauri-apps/cli/-/cli-2.0.0-alpha.20.tgz"
+  "version" "2.0.0-alpha.20"
   optionalDependencies:
-    "@tauri-apps/cli-darwin-arm64" "2.0.0-alpha.18"
-    "@tauri-apps/cli-darwin-x64" "2.0.0-alpha.18"
-    "@tauri-apps/cli-linux-arm-gnueabihf" "2.0.0-alpha.18"
-    "@tauri-apps/cli-linux-arm64-gnu" "2.0.0-alpha.18"
-    "@tauri-apps/cli-linux-arm64-musl" "2.0.0-alpha.18"
-    "@tauri-apps/cli-linux-x64-gnu" "2.0.0-alpha.18"
-    "@tauri-apps/cli-linux-x64-musl" "2.0.0-alpha.18"
-    "@tauri-apps/cli-win32-arm64-msvc" "2.0.0-alpha.18"
-    "@tauri-apps/cli-win32-ia32-msvc" "2.0.0-alpha.18"
-    "@tauri-apps/cli-win32-x64-msvc" "2.0.0-alpha.18"
+    "@tauri-apps/cli-darwin-arm64" "2.0.0-alpha.20"
+    "@tauri-apps/cli-darwin-x64" "2.0.0-alpha.20"
+    "@tauri-apps/cli-linux-arm-gnueabihf" "2.0.0-alpha.20"
+    "@tauri-apps/cli-linux-arm64-gnu" "2.0.0-alpha.20"
+    "@tauri-apps/cli-linux-arm64-musl" "2.0.0-alpha.20"
+    "@tauri-apps/cli-linux-x64-gnu" "2.0.0-alpha.20"
+    "@tauri-apps/cli-linux-x64-musl" "2.0.0-alpha.20"
+    "@tauri-apps/cli-win32-arm64-msvc" "2.0.0-alpha.20"
+    "@tauri-apps/cli-win32-ia32-msvc" "2.0.0-alpha.20"
+    "@tauri-apps/cli-win32-x64-msvc" "2.0.0-alpha.20"
 
 "@tootallnate/once@1":
   "integrity" "sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw=="

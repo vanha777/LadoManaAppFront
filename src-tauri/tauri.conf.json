@@ -3,7 +3,8 @@
     "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm start",
     "devPath": "http://localhost:3000",
-    "distDir": "../build"
+    "distDir": "../build",
+    "withGlobalTauri": true
   },
   "package": {
     "productName": "Music Center Lado",
@@ -13,13 +14,13 @@
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
-      "copyright": "",
+      "copyright": "vanha101096@gmail.com",
       "deb": {
         "depends": []
       },
       "externalBin": [],
       "iOS": {
-        "developmentTeam": "demo"
+        "developmentTeam": "van ha (Personal Team)"
       },
       "icon": [
         "icons/32x32.png",
@@ -28,7 +29,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "Lado.app",
       "longDescription": "",
       "macOS": {
         "entitlements": null,

@@ -3,7 +3,7 @@ import { paramCase } from 'change-case';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { primitives } from "@tauri-apps/api";
+import { invoke } from '@tauri-apps/api/core'
 // @mui
 import {
   Tab,
@@ -97,7 +97,7 @@ export default function UserListPage() {
   // Get User Data 
   const fetchStudent = async () => {
     try {
-      const response = await primitives.invoke("get_all_student");
+      const response = await invoke("get_all_student");
       console.log("Invoke fn from Rust BE:", response);
       return response;
     } catch (error) {
@@ -180,7 +180,7 @@ export default function UserListPage() {
   const handleDeleteRow = async (id) => {
     console.log("this is delete id", id);
     try {
-      const response = await primitives.invoke("delete_student", { id });
+      const response = await invoke("delete_student", { id });
       console.log("Invoke fn from Rust BE:", response);
       enqueueSnackbar('Delete success!');
       await setTableData(response);
