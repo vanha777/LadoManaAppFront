@@ -1,12 +1,16 @@
 {
   "name": "@minimal/minimal-kit-react",
+  "type": "module",
   "author": "Minimals UI",
   "version": "4.3.0",
   "description": "Javascript Version",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "vite build",
+    "dev": "vite",
+    "tauri": "tauri",
+    "preview": "vite preview",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .js,.jsx .",
     "lint:fix": "eslint --fix --ext .js,.jsx .",
@@ -109,6 +113,7 @@
   "devDependencies": {
     "@babel/core": "^7.21.0",
     "@babel/eslint-parser": "^7.19.1",
+    "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.32.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.6.0",
@@ -120,7 +125,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "internal-ip": "^8.0.0",
     "prettier": "^2.8.3",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "vite": "^5.0.10"
   },
   "overrides": {
     "nth-check": "2.1.1"
