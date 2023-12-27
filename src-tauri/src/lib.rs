@@ -5,9 +5,11 @@
 //     .expect("error while running tauri application");
 // }
 pub mod models;
+use std::env;
+
 use models::student::Student;
 
-use serde_json::json;
+use serde_json::{json, Value};
 use tauri::App;
 #[cfg(mobile)]
 mod mobile;
@@ -122,6 +124,29 @@ async fn delete_student(id: Vec<String>) -> Result<Vec<Vec<Student>>, String> {
     Ok(filtered_data)
 }
 
+#[tauri::command]
+async fn login(email:&str,password:&str) -> Result<Value, String> {
+    let madcatz_server =
+    env::var("MADCATZ_SERVER").unwrap_or_else(|_| "http://localhost:1010/".to_string());
+let client = reqwest::Client::new();
+let response = client
+    .post(format!("{}login", madcatz_server))
+    .json(&json!({
+        "email":email,
+        "password":password
+    }))
+    .send()
+    .await
+    .map_err(|e| e.to_string())?;
+
+let res = response
+    .json::<Value>()
+    .await
+    .map_err(|e| e.to_string())?;
+
+    Ok(res)
+}
+
 #[derive(Default)]
 pub struct AppBuilder {
     setup: Option<SetupHook>,
@@ -150,7 +175,8 @@ impl AppBuilder {
             .invoke_handler(tauri::generate_handler![
                 greet,
                 get_all_student,
-                delete_student
+                delete_student,
+                login
             ])
             .run(tauri::generate_context!())
             .expect("error while running tauri application");

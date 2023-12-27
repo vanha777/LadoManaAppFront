@@ -29,8 +29,8 @@ export default function AuthLoginForm() {
 
 
   const defaultValues = {
-    email: 'admin@lopnhaclado.com',
-    password: '12345679',
+    email: 'vanha101096@gmail.com',
+    password: 'Vanha12345679',
   };
 
   const methods = useForm({

@@ -194,9 +194,9 @@ export const MUITooltipPage = Loadable(
 export const MUITransferListPage = Loadable(
   lazy(() => import('../pages/components/mui/MUITransferListPage'))
 );
-export const MUITreesViewPage = Loadable(
-  lazy(() => import('../pages/components/mui/MUITreesViewPage'))
-);
+// export const MUITreesViewPage = Loadable(
+//   lazy(() => import('../pages/components/mui/MUITreesViewPage'))
+// );
 
 // EXTRA
 export const DemoAnimatePage = Loadable(

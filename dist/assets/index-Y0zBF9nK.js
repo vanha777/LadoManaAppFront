@@ -1,0 +1,1 @@
+import{c7 as t,c8 as n}from"./index-kAVNsXXW.js";function a(r){return r.charAt(0).toUpperCase()+r.substr(1)}function o(r,e){var s=r.toLowerCase();return e===0?a(s):s}function c(r,e){return e===void 0&&(e={}),t(r,n({delimiter:" ",transform:o},e))}export{c as s};

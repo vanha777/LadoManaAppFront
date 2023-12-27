@@ -2416,7 +2416,7 @@
   "resolved" "https://registry.npmjs.org/@mui/core-downloads-tracker/-/core-downloads-tracker-5.15.1.tgz"
   "version" "5.15.1"
 
-"@mui/lab@^5.0.0-alpha.116":
+"@mui/lab@^5.0.0-alpha.147":
   "integrity" "sha512-gY7UM2kNSxiVLfsm0o6HG2G5rM2Vr47prJhDCazY+VG/NOSRc8CG7la6dpL9WDTJhotEZdWwfj1FOUxTonmuQA=="
   "resolved" "https://registry.npmjs.org/@mui/lab/-/lab-5.0.0-alpha.157.tgz"
   "version" "5.0.0-alpha.157"

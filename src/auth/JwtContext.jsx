@@ -3,6 +3,7 @@ import { createContext, useEffect, useReducer, useCallback, useMemo } from 'reac
 // utils
 // import axios from '../utils/axios';
 import axios from 'axios';
+import { invoke } from '@tauri-apps/api/core';
 // import localStorageAvailable from '../utils/localStorageAvailable';
 //
 // import { isValidToken, setSession } from './utils';
@@ -73,11 +74,13 @@ export function AuthProvider({ children }) {
   const initialize = useCallback(async () => {
     try {
       // const accessToken = storageAvailable ? localStorage.getItem('accessToken') : '';
-      const response = await axios.get('http://127.0.0.1:3333/test', { withCredentials: true });
-      console.log(response.data[0])
-      if (response.status === 200) {
+      const response = 200;
+      // console.log(response.data)
+      if (response === 200) {
         // setSession(accessToken);
-        const  user  = response.data[0];
+        const user = {
+          first_name: "van ha"
+        };
         dispatch({
           type: 'INITIAL',
           payload: {
@@ -112,14 +115,16 @@ export function AuthProvider({ children }) {
 
   // LOGIN
   const login = useCallback(async (email, password) => {
-    // const response = await axios.post('http://127.0.0.1:3333/login', {
+    const response = await invoke("login", { email, password });
+    // const response = await axios.post('http://localhost:1010/login', {
     //   email,
     //   password,
     // }, { withCredentials: true });
-    // const  user  = response.data[0]
-    const user = {
-      first_name:"van ha"
-    };
+    console.log("login ", response);
+    const user = response
+    // const user = {
+    //   first_name:"van ha"
+    // };
     // setSession(accessToken);
 
     dispatch({
@@ -138,7 +143,7 @@ export function AuthProvider({ children }) {
       firstName,
       lastName,
     });
-    const  user  = response.data[0];
+    const user = response.data[0];
 
     // localStorage.setItem('accessToken', accessToken);
 

@@ -1,10 +1,10 @@
 {
-  "name": "@minimal/minimal-kit-react",
+  "name": "Lado Music Center",
   "type": "module",
-  "author": "Minimals UI",
+  "author": "copycodervj",
   "version": "4.3.0",
   "description": "Javascript Version",
-  "private": true,
+  "private": false,
   "scripts": {
     "start": "react-scripts start",
     "build": "vite build",
@@ -52,7 +52,7 @@
     "@hello-pangea/dnd": "^16.2.0",
     "@hookform/resolvers": "^2.9.10",
     "@iconify/react": "^4.0.1",
-    "@mui/lab": "^5.0.0-alpha.116",
+    "@mui/lab": "^5.0.0-alpha.147",
     "@mui/material": "^5.11.10",
     "@mui/system": "^5.11.5",
     "@mui/x-data-grid": "^5.17.19",
