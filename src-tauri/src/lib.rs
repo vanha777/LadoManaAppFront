@@ -9,8 +9,8 @@ pub mod ultilities;
 use std::{env, fmt::format, ops::Deref};
 
 use models::{
-    class::{UpdateClassRequest, UpdateClassStatusRequest},
-    student::{Student, StudentRegister, StudentRequest, RegisterStudent},
+    class::{ClassTypeSql, UpdateClassRequest, UpdateClassStatusRequest},
+    student::{RegisterStudent, Student, StudentRegister, StudentRequest},
 };
 
 use serde_json::{json, Value};
@@ -145,7 +145,7 @@ async fn delete_student(id: Vec<String>) -> Result<Vec<Vec<Student>>, String> {
 #[tauri::command]
 async fn create_student(payload: RegisterStudent) -> Result<u64, String> {
     let new_student = StudentRegister {
-        id:"".to_string(),
+        id: "".to_string(),
         password: payload.first_name.clone(),
         first_name: payload.first_name.clone(),
         last_name: payload.last_name.clone(),
@@ -268,6 +268,25 @@ async fn update_class(payload: UpdateClassRequest) -> Result<u64, String> {
 }
 
 #[tauri::command]
+async fn get_class_type() -> Result<Vec<ClassTypeSql>, String> {
+    let madcatz_server =
+        env::var("MADCATZ_SERVER").unwrap_or_else(|_| "http://localhost:1010/".to_string());
+    let client = reqwest::Client::new();
+    let response = client
+        .post(format!("{}get-class-type", madcatz_server))
+        .send()
+        .await
+        .map_err(|e| e.to_string())?;
+
+    let res = response
+        .json::<Vec<ClassTypeSql>>()
+        .await
+        .map_err(|e| e.to_string())?;
+
+    Ok(res)
+}
+
+#[tauri::command]
 async fn update_class_status(payload: UpdateClassStatusRequest) -> Result<u64, String> {
     let madcatz_server =
         env::var("MADCATZ_SERVER").unwrap_or_else(|_| "http://localhost:1010/".to_string());
@@ -320,7 +339,8 @@ impl AppBuilder {
                 delete_student,
                 update_class,
                 update_class_status,
-                create_student
+                create_student,
+                get_class_type
             ])
             .run(tauri::generate_context!())
             .expect("error while running tauri application");

@@ -28,3 +28,12 @@ pub struct UpdateClassStatusRequest {
     pub uuid: String,
     pub status: Option<bool>,
 }
+
+#[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct ClassTypeSql {
+    pub class_type: Option<String>,
+    pub days_of_week: Vec<String>,
+    pub references: Option<String>,
+    pub start_time: Option<NaiveTime>,
+    pub end_time: Option<NaiveTime>,
+}
