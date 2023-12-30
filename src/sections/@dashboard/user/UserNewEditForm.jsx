@@ -24,6 +24,7 @@ import FormProvider, {
   RHFTextField,
   RHFUploadAvatar,
 } from '../../../components/hook-form';
+import { invoke } from '@tauri-apps/api/core';
 
 
 // ----------------------------------------------------------------------
@@ -56,19 +57,17 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
 
   const navigate = useNavigate();
 
-  const newDate = currentUser?.profile.date_of_birth.substring(0, 10);
-
-
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
+    id: Yup.string(),
     firstName: Yup.string().required('Tên bắt buộc'),
     lastName: Yup.string().required('Họ bắt buộc'),
     email: Yup.string().notRequired().email('Email Không hợp lệ'),
-    mobile: Yup.number().required('Số điện thoại bắt buộc'),
+    mobile: Yup.string().required('Số điện thoại bắt buộc'),
     address: Yup.string().notRequired(),
     //  country: Yup.string().required('Quốc gia bắt buộc'),
-    dateOfBirth: Yup.date().required('Ngày sinh bắt buộc'),  // this is ngay sinh
+    dateOfBirth: Yup.string().required('Ngày sinh bắt buộc'),  // this is ngay sinh
     suburb: Yup.string().notRequired(),
     city: Yup.string().notRequired(),
     class: Yup.string().required('Môn học bắt buộc'),   // this is mon hoc
@@ -78,28 +77,31 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
     postCode: Yup.string().notRequired(),
     avatarUrl: Yup.mixed().notRequired(),
     startDate1: Yup.date().required('Bắt đầu học bắt buộc'),
-    startDate2: Yup.date().required('Bắt đầu học bắt buộc'),
-    numberOfMonth: Yup.number().required("Thời gian hết hạn bắt buộc")
+    // startDate2: Yup.date().notRequired('Bắt đầu học bắt buộc'),
+    numberOfMonth: Yup.number().notRequired("Thời gian hết hạn bắt buộc")
   });
   // if pass in Current User => Sua Doi if empty => Ghi Danh
   const defaultValues = useMemo(
     () => ({
-      firstName: currentUser?.profile.first_name || '',
-      lastName: currentUser?.profile.last_name || '',
-      email: currentUser?.info?.email || '',
-      mobile: currentUser?.info?.mobile || '',
-      address: currentUser?.info?.address || '',
+      id: currentUser?.id || '',
+      firstName: currentUser?.first_name || '',
+      lastName: currentUser?.last_name || '',
+      email: currentUser?.email || '',
+      mobile: currentUser?.mobile || '',
+      address: currentUser?.address || '',
       //   country: currentUser?.country || '',
-      suburb: currentUser?.info.suburb || '',
-      city: currentUser?.info.city || '',
-      postCode: currentUser?.info.post_code || 0,
-      avatarUrl: currentUser?.profile.avatar_url || "",
+      suburb: currentUser?.suburb || '',
+      city: currentUser?.city || '',
+      postCode: currentUser?.post_code || 0,
+      avatarUrl: currentUser?.avatar_url || "",
       // isVerified: currentUser?.isVerified || true
-      numberOfClass: currentUser?.profile.number_of_class || "",
-      numberOfMonth: currentUser?.profile.number_of_month || "",
-      status: currentUser?.profile.status || "false",
-      dateOfBirth: newDate || "",
-      class: currentUser?.profile.class || '',
+      numberOfClass: currentUser?.number_of_class || "",
+      numberOfMonth: currentUser?.number_of_month || "",
+      status: currentUser?.status || "pending",
+      dateOfBirth: currentUser?.date_of_birth || "",
+      class: currentUser?.class || '',
+      startDate1: currentUser?.start_date_1 || "",
+      startDate2: currentUser?.start_date_2 || "",
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -141,42 +143,41 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
 
   // SUBMIT FORMS 
   const onSubmit = async (data) => {
-
+    console.log("submitting");
     try {
       if (!isEdit) {
         // CREATE NEW STUDENT
         console.log('CREATE', data);
-
-        const response = await axios.post(
-          'http://127.0.0.1:3333/students',
-          data,
-          { withCredentials: true }
-        );
-        console.log("user.ID", response)
-
+        // const response = await axios.post(
+        //   'http://127.0.0.1:3333/students',
+        //   data,
+        //   { withCredentials: true }
+        // );
+        // console.log("user.ID", response)
+        const response = await invoke("create_student", { payload:data });
+        console.log(response)
         await new Promise((resolve) => setTimeout(resolve, 1000));
         enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
         // reset();
-
         //   navigate(PATH_DASHBOARD.user.list);
 
       }
       if (isEdit) {
         // EDIT EXISTING STUDENT
         console.log('EDIT', data);
-        const id = currentUser?.profile.user_id
-        const response = await axios.put(
-          `http://127.0.0.1:3333/students/${id}`,
-          data,
-          { withCredentials: true }
-        );
-        console.log(response)
+        // const id = currentUser?.profile.user_id
+        // const response = await axios.put(
+        //   `http://127.0.0.1:3333/students/${id}`,
+        //   data,
+        //   { withCredentials: true }
+        // );
 
+        const response = await invoke("update_student", { payload:data });
+        console.log(response)
         await new Promise((resolve) => setTimeout(resolve, 1000));
         enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-        reset();
-
-        navigate(PATH_DASHBOARD.user.list);
+        // reset();
+        // navigate(PATH_DASHBOARD.user.list);
       }
     } catch (error) {
       console.error(error);
@@ -283,7 +284,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
             <RHFTextField
               name="numberOfClass"
               label="Số Buổi Học"
-              helperText="Điều Chỉnh Số buổi học còn lại"
+              // helperText="Điều Chỉnh Số buổi học còn lại"
               type="number"
               // inputProps={{ min: 0 }} // Optionally, set a minimum value
               sx={{ mb: 2 }} // Adjust styling as needed
@@ -291,7 +292,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
             <RHFTextField
               name="numberOfMonth"
               label="Số tháng"
-              helperText="Số tháng hết hạn"
+              // helperText="Số tháng hết hạn"
               type="number"
               sx={{ mb: 2 }} // Adjust styling as needed
             />
@@ -300,7 +301,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
               disabled
               label="Số buổi"
               defaultValue="2 buổi / 1 tuần"
-              helperText="Số buổi mỗi tuần"
+              // helperText="Số buổi mỗi tuần"
               type="string"
               sx={{ mb: 2 }} // Adjust styling as needed
             />
@@ -309,13 +310,16 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
               disabled
               label="số tiếng"
               defaultValue="1 tiếng / 1 buổi"
-              helperText="số giờ mỗi buổi"
+              // helperText="số giờ mỗi buổi"
               type="string"
               sx={{ mb: 2 }} // Adjust styling as needed
             />
-            {!isEdit ? <> <RHFTextField name="startDate1" type="datetime-local" defaultValue="2023-10-10T19:30" helperText="Ngày học thứ nhất" />
-              <RHFTextField name="startDate2" defaultValue="2023-10-10T19:30" type="datetime-local" helperText="Ngày học thứ hai" /> </> : <><RHFTextField name="startDate1" type="datetime-local" helperText="Ngày học thứ nhất" />
-              <RHFTextField name="startDate2" type="datetime-local" helperText="Ngày học thứ hai" /></>}
+             <> <RHFTextField name="startDate1" type="datetime-local" helperText="Ngày bắt đầu học" />
+            </>
+            {/* {!isEdit ? <> <RHFTextField name="startDate1" type="datetime-local" helperText="Ngày bắt đầu học" />
+            </> : <><RHFTextField name="startDate1" type="datetime-local" helperText="Ngày bắt đầu học" />
+            </>} */}
+            {/* <RHFTextField name="startDate2" type="datetime-local" helperText="Ngày học thứ hai" />  */}
           </Card>
         </Grid>
 
@@ -337,7 +341,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                 name="class"
                 label="Môn Học"
               >
-                <option value="" />
+                <option value="class" />
                 <option value="piano">Piano</option>
                 <option value="guitar">Guitar</option>
                 <option value="violin">Violin</option>

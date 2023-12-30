@@ -10,6 +10,7 @@
   windows_subsystem = "windows"
 )]
 pub mod models;
+pub mod ultilities;
 #[tokio::main]
 pub async fn main() {
   // Change demo_mobile_app to the name of your app!
