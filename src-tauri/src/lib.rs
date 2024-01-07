@@ -8,9 +8,10 @@ pub mod models;
 pub mod ultilities;
 use std::{env, fmt::format, ops::Deref};
 
+use chrono::{Duration, NaiveTime};
 use models::{
     class::{ClassTypeSql, UpdateClassRequest, UpdateClassStatusRequest},
-    student::{RegisterStudent, Student, StudentRegister, StudentRequest},
+    student::{ClassPerWeek, RegisterStudent, Student, StudentRegister, StudentRequest},
 };
 
 use serde_json::{json, Value};
@@ -144,6 +145,142 @@ async fn delete_student(id: Vec<String>) -> Result<Vec<Vec<Student>>, String> {
 
 #[tauri::command]
 async fn create_student(payload: RegisterStudent) -> Result<u64, String> {
+    let mut classes: Vec<ClassPerWeek> = Vec::new();
+
+    match payload.number_of_minutes_per_class_monday {
+        Some(x) => {
+            let start_time =
+                NaiveTime::parse_from_str(&payload.start_time_monday.clone().unwrap_or_default(), "%H:%M")
+                    .expect("Invalid time format");
+            // Add the period to the time
+            let (end_time, _) =
+                start_time.overflowing_add_signed(Duration::minutes(x as i64));
+
+            let value = ClassPerWeek {
+                class_type: payload.class.clone(),
+                day: "monday".to_string(),
+                start_time,
+                end_time,
+            };
+            classes.push(value);
+        }
+        None => (),
+    };
+    match payload.number_of_minutes_per_class_tuesday {
+        Some(x) => {
+            let start_time =
+                NaiveTime::parse_from_str(&payload.start_time_tuesday.unwrap_or_default(), "%H:%M")
+                    .expect("Invalid time format");
+            // Add the period to the time
+            let (end_time, _) =
+                start_time.overflowing_add_signed(Duration::minutes(x as i64));
+
+            let value = ClassPerWeek {
+                class_type: payload.class.clone(),
+                day: "tuesday".to_string(),
+                start_time,
+                end_time,
+            };
+            classes.push(value);
+        }
+        None => (),
+    };
+    match payload.number_of_minutes_per_class_wednesday {
+        Some(x) => {
+            let start_time =
+                NaiveTime::parse_from_str(&payload.start_time_wednesday.clone().unwrap_or_default(), "%H:%M")
+                    .expect("Invalid time format");
+            // Add the period to the time
+            let (end_time, _) =
+                start_time.overflowing_add_signed(Duration::minutes(x as i64));
+
+            let value = ClassPerWeek {
+                class_type: payload.class.clone(),
+                day: "wednesday".to_string(),
+                start_time,
+                end_time,
+            };
+            classes.push(value);
+        }
+        None => (),
+    };
+    match payload.number_of_minutes_per_class_thursdays {
+        Some(x) => {
+            let start_time =
+                NaiveTime::parse_from_str(&payload.start_time_thursdays.clone().unwrap_or_default(), "%H:%M")
+                    .expect("Invalid time format");
+            // Add the period to the time
+            let (end_time, _) =
+                start_time.overflowing_add_signed(Duration::minutes(x as i64));
+
+            let value = ClassPerWeek {
+                class_type: payload.class.clone(),
+                day: "thursdays".to_string(),
+                start_time,
+                end_time,
+            };
+            classes.push(value);
+        }
+        None => (),
+    };
+    match payload.number_of_minutes_per_class_friday {
+        Some(x) => {
+            let start_time =
+                NaiveTime::parse_from_str(&payload.start_time_friday.clone().unwrap_or_default(), "%H:%M")
+                    .expect("Invalid time format");
+            // Add the period to the time
+            let (end_time, _) =
+                start_time.overflowing_add_signed(Duration::minutes(x as i64));
+
+            let value = ClassPerWeek {
+                class_type: payload.class.clone(),
+                day: "friday".to_string(),
+                start_time,
+                end_time,
+            };
+            classes.push(value);
+        }
+        None => (),
+    };
+    match payload.number_of_minutes_per_class_saturday {
+        Some(x) => {
+            let start_time =
+                NaiveTime::parse_from_str(&payload.start_time_saturday.clone().unwrap_or_default(), "%H:%M")
+                    .expect("Invalid time format");
+            // Add the period to the time
+            let (end_time, _) =
+                start_time.overflowing_add_signed(Duration::minutes(x as i64));
+
+            let value = ClassPerWeek {
+                class_type: payload.class.clone(),
+                day: "saturday".to_string(),
+                start_time,
+                end_time,
+            };
+            classes.push(value);
+        }
+        None => (),
+    };
+    match payload.number_of_minutes_per_class_sunday {
+        Some(x) => {
+            let start_time =
+                NaiveTime::parse_from_str(&payload.start_time_sunday.clone().unwrap_or_default(), "%H:%M")
+                    .expect("Invalid time format");
+            // Add the period to the time
+            let (end_time, _) =
+                start_time.overflowing_add_signed(Duration::minutes(x as i64));
+
+            let value = ClassPerWeek {
+                class_type: payload.class.clone(),
+                day: "sunday".to_string(),
+                start_time,
+                end_time,
+            };
+            classes.push(value);
+        }
+        None => (),
+    };
+
     let new_student = StudentRegister {
         id: "".to_string(),
         password: payload.first_name.clone(),
@@ -170,6 +307,7 @@ async fn create_student(payload: RegisterStudent) -> Result<u64, String> {
         start_date_2: payload.start_date_2.clone(),
         number_of_month: payload.number_of_month.clone(),
         references: payload.references.clone(),
+        number_of_class_per_week: classes,
     };
     let madcatz_server =
         env::var("MADCATZ_SERVER").unwrap_or_else(|_| "http://localhost:1010/".to_string());

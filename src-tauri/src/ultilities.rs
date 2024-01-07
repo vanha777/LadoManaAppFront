@@ -33,6 +33,8 @@ pub fn convert_student_format(input_student: Vec<Student>) -> Vec<Student> {
             start_date_2: x.start_date_2.clone(),
             number_of_month: x.number_of_month.clone(),
             references: x.references.clone(),
+            number_of_class_per_week: x.number_of_class_per_week.clone(),
+            number_of_minute_per_class:x.number_of_minute_per_class.clone()
         })
         .collect::<Vec<Student>>()
 }
@@ -70,6 +72,8 @@ pub fn local_date_student(x: Student) -> Student {
         start_date_2: x.start_date_2.clone(),
         number_of_month: x.number_of_month.clone(),
         references: x.references.clone(),
+        number_of_class_per_week:x.number_of_class_per_week.clone(),
+        number_of_minute_per_class:x.number_of_minute_per_class.clone()
     }
 }
 
@@ -94,5 +98,7 @@ pub fn full_name_student(x: Student) -> Student {
         start_date_2: x.start_date_2.clone(),
         number_of_month: x.number_of_month.clone(),
         references: x.references.clone(),
+        number_of_class_per_week:x.number_of_class_per_week.clone(),
+        number_of_minute_per_class:x.number_of_minute_per_class.clone()
     }
 }
